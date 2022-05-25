@@ -1,0 +1,12 @@
+name: easy_box
+description: A new Flutter package project.
+version: 0.0.1
+homepage: https://github.com/DrafaKiller/EasyBox-flutter
+
+environment:
+  sdk: ">=2.17.0 <3.0.0"
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
