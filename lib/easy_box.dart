@@ -38,6 +38,15 @@ class Box extends StatelessWidget {
 
   // -= Alignment =-
   final Alignment? alignment;
+  final Spacement? spacement;
+
+  // -= Expanded =-
+  final bool? expanded;
+
+
+
+  // -= Text Style =-
+  final TextStyle? textStyle;
 
 
 
@@ -46,14 +55,6 @@ class Box extends StatelessWidget {
   final double? scale;
   final double? rotate;
   final Offset? origin;
-  
-
-
-  // -= Checks =-
-  final bool hasList;
-  final bool hasContainer;
-  final bool hasDecoration;
-  final bool hasTransform;
 
 
 
@@ -96,6 +97,10 @@ class Box extends StatelessWidget {
 
     // -= Alignment =-
     this.alignment,
+    this.spacement,
+
+    // -= Expanded =-
+    this.expanded,
 
 
 
@@ -104,63 +109,69 @@ class Box extends StatelessWidget {
     this.scale,
     this.rotate,
     this.origin,
-  }) : 
-    hasList =
-      // -= List =-
-      itemBuilder != null ||
-      children != null,
-      
-
-
-    hasContainer =
-      // -= Padding and Margin =-
-      (
-        padding != null && 
-        !(
-          // -= List =-
-          itemBuilder != null ||
-          children != null
-        )
-      ) || 
-      margin != null || 
-      
-      // -= Background =-
-      backgroundColor != null || 
-      backgroundGradient != null || 
-      backgroundImage != null || 
-
-      // -= Border =-
-      border != null || 
-      borderRadius != null || 
-
-      // -= Shape =-
-      shape != null ||
-
-      // -= Alignment =-
-      alignment != null,
 
 
 
-    hasDecoration =
-      // -= Background =-
-      backgroundColor != null || 
-      backgroundGradient != null || 
-      backgroundImage != null || 
+    // -= Text Style =-
+    this.textStyle,
+  });
 
-      // -= Border =-
-      border != null || 
-      borderRadius != null || 
+  
 
-      // -= Shape =-
-      shape != null,
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+// -=                             Checks                                =-
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+  bool get hasList =>
+    (itemBuilder != null || children != null) &&
+    alignment == null;
 
 
 
-    hasTransform =
-      // -= Transform =-
-      translate != null || 
-      scale != null || 
-      rotate != null;
+  bool get hasColumnRow => 
+    (itemBuilder != null || children != null) &&
+    alignment != null;
+  
+
+
+  bool get hasContainer =>
+    // -= Padding and Margin =-
+    (
+      (padding != null || alignment != null) &&
+      !hasList && !hasColumnRow
+    ) || 
+    margin != null ||
+
+    // -= Size =-
+    width != null ||
+    height != null ||
+
+    // -= Expanded =-
+    expanded != null ||
+    
+    hasDecoration;
+
+
+
+  bool get hasDecoration =>
+    // -= Background =-
+    backgroundColor != null || 
+    backgroundGradient != null || 
+    backgroundImage != null || 
+
+    // -= Border =-
+    border != null || 
+    borderRadius != null || 
+
+    // -= Shape =-
+    shape != null;
+
+
+
+  bool get hasTransform =>
+    translate != null ||
+    scale != null ||
+    rotate != null;
 
 
 
@@ -173,33 +184,48 @@ class Box extends StatelessWidget {
     Widget composedWidget = child ?? Container();
     
     // -= List =-
-    if (this.itemBuilder != null) {
-      composedWidget = ListView.builder(
-        itemCount: itemCount,
-        itemBuilder:
-          children != null ?
-            (context, index) {
-              if (children!.length < index) return children![index];
-              return itemBuilder!(context, index);
-            } : itemBuilder!,
+    if (hasList) {
+      if (this.itemBuilder != null) {
+        composedWidget = ListView.builder(
+          itemCount: itemCount,
+          itemBuilder:
+            children != null ?
+              (context, index) {
+                if (children!.length < index) return children![index];
+                return itemBuilder!(context, index);
+              } : itemBuilder!,
 
-        scrollDirection: direction ?? Axis.vertical,
-        physics: physics,
-        
-        // -= Padding =-
-        padding: padding,
-      );
-    } else if (this.children != null) {
-      composedWidget = ListView(
-        children: children!,
-        scrollDirection: direction ?? Axis.vertical,
-        physics: physics,
+          scrollDirection: direction ?? Axis.vertical,
+          physics: physics,
+          
+          // -= Padding =-
+          padding: padding,
+        );
+      } else if (this.children != null) {
+        composedWidget = ListView(
+          children: children!,
+          scrollDirection: direction ?? Axis.vertical,
+          physics: physics,
 
-        // -= Padding =-
-        padding: padding,
+          // -= Padding =-
+          padding: padding,
+        );
+      }
+    } else if (hasColumnRow) {
+      final itemList = children ?? <Widget>[];
+      if (itemBuilder != null && itemCount != null && itemCount! > itemList.length) {
+        for (int i = itemList.length; i < itemCount!; i++) {
+          itemList.add(itemBuilder!(context, i));
+        }
+      }
+      
+      composedWidget = Column(
+        children: itemList,
+        mainAxisAlignment: spacement?.alignment ?? alignment?.toMainAxisAlignment() ?? MainAxisAlignment.start,
+        crossAxisAlignment: alignment?.toCrossAxisAlignment() ?? CrossAxisAlignment.center,
       );
     }
-
+    
 
 
     // -= Container =-
@@ -209,12 +235,12 @@ class Box extends StatelessWidget {
         padding: padding,
         margin: margin,
 
-        // -= Size =-
-        width: width,
-        height: height,
+        // -= Size and Expanded =-
+        width: width ?? (expanded ?? false ? double.infinity : null),
+        height: height ?? (expanded ?? false ? double.infinity : null),
 
         // -= Alignment =-
-        alignment: alignment,
+        alignment: (!hasList && !hasColumnRow) ? alignment : null,
 
         decoration:
           hasDecoration ? BoxDecoration(
@@ -262,6 +288,58 @@ class Box extends StatelessWidget {
       }
     }
 
+
+
+    // -= Text Style =-
+    if (textStyle != null) {
+      composedWidget = DefaultTextStyle(
+        child: composedWidget,
+        style: textStyle!,
+      );
+    }
+
     return composedWidget;
+  }
+}
+
+
+
+enum Spacement {
+  spaceAround(MainAxisAlignment.spaceAround),
+  spaceBetween(MainAxisAlignment.spaceBetween),
+  spaceEvenly(MainAxisAlignment.spaceEvenly),
+  none(MainAxisAlignment.center);
+
+  final MainAxisAlignment alignment;
+  const Spacement(this.alignment);
+}
+
+
+
+extension on Alignment {
+  MainAxisAlignment toMainAxisAlignment() {
+    if (this == Alignment.bottomCenter || this == Alignment.bottomLeft || this == Alignment.bottomRight)
+      return MainAxisAlignment.start;
+
+    if (this == Alignment.center || this == Alignment.centerLeft ||this == Alignment.centerRight)
+      return MainAxisAlignment.center;
+
+    if (this == Alignment.topCenter || this == Alignment.topLeft || this == Alignment.topRight)
+      return MainAxisAlignment.end;
+
+    return MainAxisAlignment.start;
+  }
+
+  CrossAxisAlignment toCrossAxisAlignment() {
+    if (this == Alignment.bottomLeft || this == Alignment.centerLeft || this == Alignment.topLeft)
+      return CrossAxisAlignment.start;
+
+    if (this == Alignment.bottomCenter || this == Alignment.center || this == Alignment.topCenter)
+      return CrossAxisAlignment.center;
+
+    if (this == Alignment.bottomRight || this == Alignment.centerRight || this == Alignment.topRight)
+      return CrossAxisAlignment.end;
+
+    return CrossAxisAlignment.center;
   }
 }
