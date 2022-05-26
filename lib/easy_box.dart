@@ -26,8 +26,27 @@ class Box extends StatelessWidget {
   final List<Widget>? children;
   final Widget Function(BuildContext context, int index)? itemBuilder;
   final int? itemCount;
-  final Axis? direction;
   final ScrollPhysics? physics;
+  /// Direction of the items in a list.
+  /// 
+  /// Only used when `children` or `itemBuilder` are set.
+  final Axis? direction;
+  /// Alignment of the items in a list.
+  /// 
+  /// Using this property, will use a `Column/Row` instead of a `ListView`.
+  /// 
+  /// Only used when `children` or `itemBuilder` are set.
+  final Alignment? alignment;
+  /// Spacing of the items in a list.
+  /// 
+  /// Only used when `children` or `itemBuilder` are set.
+  final Spacing? spacing;
+
+
+
+  // -= Expanded =-
+  /// Sets the width and height to `double.infinity` if nothing was set.
+  final bool? expanded;
 
 
 
@@ -51,16 +70,10 @@ class Box extends StatelessWidget {
   // -= Shape =-
   final BoxShape? shape;
 
-  // -= Alignment =-
-  final Alignment? alignment;
-  final Spacing? spacing;
-
-  // -= Expanded =-
-  final bool? expanded;
-
 
 
   // -= Text Style =-
+  /// Sets the default text style for all Text widgets within this Box.
   final TextStyle? textStyle;
 
 
@@ -69,6 +82,9 @@ class Box extends StatelessWidget {
   final Offset? translate;
   final double? scale;
   final double? rotate;
+  /// Offset of the transform, relative to the center of the widget.
+  /// 
+  /// Affects `scale` and `rotate`.
   final Offset? origin;
 
 
@@ -76,7 +92,22 @@ class Box extends StatelessWidget {
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 // -=                          Constructor                              =-
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-
+  /// # Easy Box
+  /// 
+  /// All in one widget, with all the most basic widget properties. Composing a tree of widgets depending on the properties that you request. Just organize everything with the Box.
+  /// 
+  /// ## Features
+  /// 
+  /// * Background
+  /// * Size
+  /// * Padding and Margin
+  /// * Border
+  /// * Shape
+  /// * List
+  /// * Alignment
+  /// * Expanded
+  /// * Transform
+  /// * Text Style
   const Box({
     super.key,
     this.child,
@@ -307,7 +338,7 @@ class Box extends StatelessWidget {
 
     // -= Text Style =-
     if (textStyle != null) {
-      composedWidget = DefaultTextStyle(
+      composedWidget = DefaultTextStyle.merge(
         child: composedWidget,
         style: textStyle!,
       );
