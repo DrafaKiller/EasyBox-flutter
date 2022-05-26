@@ -33,7 +33,7 @@ import 'package:easy_box/easy_box.dart';
 ## Usage
 
 Wrap your widget with the things you need, the Box widget will do the rest.
-Or not, you can also use it without widget, whatever fits your boat.
+Or not, you can also use it without a widget, whatever fits your boat.
 
 ```dart
 Box(
