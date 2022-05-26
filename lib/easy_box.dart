@@ -38,7 +38,7 @@ class Box extends StatelessWidget {
 
   // -= Alignment =-
   final Alignment? alignment;
-  final Spacement? spacement;
+  final Spacing? spacing;
 
   // -= Expanded =-
   final bool? expanded;
@@ -97,7 +97,7 @@ class Box extends StatelessWidget {
 
     // -= Alignment =-
     this.alignment,
-    this.spacement,
+    this.spacing,
 
     // -= Expanded =-
     this.expanded,
@@ -221,7 +221,7 @@ class Box extends StatelessWidget {
       
       composedWidget = Column(
         children: itemList,
-        mainAxisAlignment: spacement?.alignment ?? alignment?.toMainAxisAlignment() ?? MainAxisAlignment.start,
+        mainAxisAlignment: spacing?.alignment ?? alignment?.toMainAxisAlignment() ?? MainAxisAlignment.start,
         crossAxisAlignment: alignment?.toCrossAxisAlignment() ?? CrossAxisAlignment.center,
       );
     }
@@ -304,14 +304,14 @@ class Box extends StatelessWidget {
 
 
 
-enum Spacement {
+enum Spacing {
   spaceAround(MainAxisAlignment.spaceAround),
   spaceBetween(MainAxisAlignment.spaceBetween),
   spaceEvenly(MainAxisAlignment.spaceEvenly),
   none(MainAxisAlignment.center);
 
   final MainAxisAlignment alignment;
-  const Spacement(this.alignment);
+  const Spacing(this.alignment);
 }
 
 
