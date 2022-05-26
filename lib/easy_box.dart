@@ -2,10 +2,25 @@ library easy_box;
 
 import 'package:flutter/widgets.dart';
 
+
+/// # Easy Box
+/// 
+/// All in one widget, with all the most basic widget properties. Composing a tree of widgets depending on the properties that you request. Just organize everything with the Box.
+/// 
+/// ## Features
+/// 
+/// * Background
+/// * Size
+/// * Padding and Margin
+/// * Border
+/// * Shape
+/// * List
+/// * Alignment
+/// * Expanded
+/// * Transform
+/// * Text Style
 class Box extends StatelessWidget {
   final Widget? child;
-
-
 
   // -= List =-
   final List<Widget>? children;
