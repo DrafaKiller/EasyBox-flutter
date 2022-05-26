@@ -1,3 +1,7 @@
+## 0.0.2+1
+
+* Changed: Better documentation, and example values
+
 ## 0.0.2
 
 * Added: More code documentation

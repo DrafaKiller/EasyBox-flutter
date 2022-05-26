@@ -14,7 +14,6 @@ All in one widget, with all the most basic widget properties. Composing a tree o
 * Shape
 * List
 * Alignment
-* Expanded
 * Transform
 * Text Style
 
@@ -33,7 +32,7 @@ import 'package:easy_box/easy_box.dart';
 ## Usage
 
 Wrap your widget with the things you need, the Box widget will do the rest.
-Or not, you can also use it without a widget, whatever fits your boat.
+Or not, you can also use it without any widget inside, whatever floats your boat.
 
 ```dart
 Box(
@@ -42,35 +41,36 @@ Box(
 ```
 
 Or wrap your list of widgets, using a `children` list or an `itemBuilder`. This will be a `ListView` or a `Column/Row`, depending on whether the `alignment` is set or not.
+The `alignment` property is used for that because alignment is only possible using `Column/Rows`.
 
 ```dart
 Box(
   children: [ ... ],
 
-  direction: ... ,
-  alignment: ... ,
-  spacing: ...
+  direction: Axis.horizontal,
+  alignment: Alignment.center,
+  spacing: Spacing.spaceAround
 )
 ```
 
-Change how your Box looks like:
+Choose your Box style and properties, it will create whatever structure it needs taking into account the widgets already requested above.
 
 ```dart
 Box(
-  width: ... ,
-  height: ... ,
+  width: 200,
+  height: 300,
 
-  backgroundColor: ... ,
-  backgroundGrandient: ... ,
-  backgroundImage: ... ,
+  backgroundColor: Colors.green,
+  backgroundGrandient: LinearGradient( ... ),
+  backgroundImage: DecorationImage( ... ),
 
-  border: ... ,
-  borderRadius: ... ,
+  border: Border.all( ... ),
+  borderRadius: BorderRadius.circular(10),
 
   shape: ... ,
 
-  padding: ... ,
-  margin: ...
+  padding: EdgeInsets.all(10),
+  margin: EdgeInsets.all(10)
 )
 ```
 
@@ -78,13 +78,13 @@ Do a quick **transform** using `translate`, `scale` and `rotate`:
 
 ```dart
 Box(
-  translate: ... ,
-  scale: ... ,
-  rotate: ...
+  translate: Offset( ... ),
+  scale: 1.5,
+  rotate: math.pi / 4
 )
 ```
 
-Change the default text style of the Text widgets inside your Box:
+Choose the default text style for all the Text widgets inside your Box.
 
 ```dart
 Box(
@@ -96,4 +96,4 @@ Box(
 
 ## GitHub
 
-The package code is available on Github: [Flutter - EasyBox](https://github.com/DrafaKiller/EasyBox-flutter)
+The widget code is available on Github: [Flutter - EasyBox](https://github.com/DrafaKiller/EasyBox-flutter)
