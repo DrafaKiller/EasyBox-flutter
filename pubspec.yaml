@@ -1,5 +1,5 @@
 name: easy_box
-description: A new Flutter package project.
+description: All in one widget, with all the most basic widget properties. Composing a tree of widgets depending on the properties that you request. Just organize everything with the Box.
 version: 0.0.1
 homepage: https://github.com/DrafaKiller/EasyBox-flutter
 
