@@ -8,11 +8,11 @@ All in one widget, with all the most basic widget properties. Composing a tree o
 ## Features
 
 * Background
-* Size
 * Padding and Margin
 * Border
-* Shape
 * List
+* Size
+* Shape
 * Alignment
 * Transform
 * Text Style
