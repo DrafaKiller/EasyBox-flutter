@@ -1,5 +1,5 @@
-[![](https://img.shields.io/badge/pub.dev-easy__box-blue)](https://pub.dev/packages/easy_box)
-[![](https://img.shields.io/badge/GitHub-EasyBox--flutter-blue?logo=github)](https://github.com/DrafaKiller/EasyBox-flutter)
+[![Pub.dev package](https://img.shields.io/badge/pub.dev-easy__box-blue)](https://pub.dev/packages/easy_box)
+[![GitHub repository](https://img.shields.io/badge/GitHub-EasyBox--flutter-blue?logo=github)](https://github.com/DrafaKiller/EasyBox-flutter)
 
 # Easy Box
 
