@@ -89,6 +89,12 @@ class Box extends StatelessWidget {
   final Color? splashColor;
   final Color? highlightColor;
   final Color? hoverColor;
+  /// Uses one color to set `splashColor`, `highlightColor` and `hoverColor` all at once, with different opacity.
+  /// 
+  /// Opacity:
+  /// * splashColor: 30%
+  /// * highlightColor: 15%
+  /// * hoverColor: 5%
   final Color? buttonColor;
 
 
