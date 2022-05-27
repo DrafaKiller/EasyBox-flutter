@@ -9,6 +9,7 @@ All in one widget, with all the most basic widget properties. Composing a tree o
 
 * Background
 * Padding and Margin
+* Button
 * Border
 * List
 * Size
@@ -16,6 +17,8 @@ All in one widget, with all the most basic widget properties. Composing a tree o
 * Alignment
 * Transform
 * Text Style
+
+*The `Button` is an InkWell + GestureDetector*
 
 ## Getting started
 
@@ -41,7 +44,8 @@ Box(
 ```
 
 Or wrap your list of widgets, using a `children` list or an `itemBuilder`. This will be a `ListView` or a `Column/Row`, depending on whether the `alignment` is set or not.
-The `alignment` property is used for that because alignment is only possible using `Column/Rows`.
+
+The `alignment` property is used for that because alignment is only possible using `Column/Row`. But another way to get that is by using the `Box.column()` and `Box.row()`.
 
 ```dart
 Box(
@@ -91,6 +95,20 @@ Box(
   textStyle: TextStyle(
     ...
   )
+)
+```
+
+Add button functionalities, like an `InkWell` or a `GestureDetector`:
+
+```dart
+Box(
+  splashColor: ... ,
+  highlightColor: ... ,
+  hoverColor: ... ,
+
+  onTap: () => ... ,
+  onLongPress: () => ... ,
+  onDoubleTap: () => ... ,
 )
 ```
 

@@ -1,5 +1,7 @@
 library easy_box;
 
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 
@@ -44,12 +46,6 @@ class Box extends StatelessWidget {
 
 
 
-  // -= Expanded =-
-  /// Sets the width and height to `double.infinity` if nothing was set.
-  final bool? expanded;
-
-
-
   // -= Padding and Margin =-
   final EdgeInsetsGeometry? padding;
   final EdgeInsetsGeometry? margin;
@@ -87,6 +83,21 @@ class Box extends StatelessWidget {
   /// Affects `scale` and `rotate`.
   final Offset? origin;
 
+  
+
+  // -= Splash =-
+  final Color? splashColor;
+  final Color? highlightColor;
+  final Color? hoverColor;
+  final Color? buttonColor;
+
+
+
+  // -= Gesture Detector =-
+  final Function()? onTap;
+  final Function()? onDoubleTap;
+  final Function()? onLongPress;
+
 
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -105,62 +116,120 @@ class Box extends StatelessWidget {
   /// * Shape
   /// * List
   /// * Alignment
-  /// * Expanded
   /// * Transform
   /// * Text Style
   const Box({
     super.key,
     this.child,
-
     // -= List =-
-    this.children,
-    this.itemBuilder,
-    this.itemCount,
-    this.physics,
-    this.direction,
-
-
-
+    this.children, this.itemBuilder, this.itemCount, this.physics, this.direction,
     // -= Padding and Margin =-
-    this.padding,
-    this.margin,
-
+    this.padding, this.margin,
     // -= Background =-
-    this.backgroundColor,
-    this.backgroundGradient,
-    this.backgroundImage,
-
+    this.backgroundColor, this.backgroundGradient, this.backgroundImage,
     // -= Size =-
-    this.width,
-    this.height,
-
+    this.width, this.height,
     // -= Border =-
-    this.border,
-    this.borderRadius,
-
+    this.border, this.borderRadius,
     // -= Shape =-
     this.shape,
-
     // -= Alignment =-
     this.alignment,
     this.spacing,
-
-    // -= Expanded =-
-    this.expanded,
-
-
-
     // -= Transform =-
-    this.translate,
-    this.scale,
-    this.rotate,
-    this.origin,
-
-
-
+    this.translate, this.scale, this.rotate, this.origin,
     // -= Text Style =-
     this.textStyle,
+    // -= Button =-
+    this.splashColor, this.highlightColor, this.hoverColor, this.buttonColor,
+    // -= Gesture Detector =-
+    this.onTap, this.onDoubleTap, this.onLongPress,
   });
+
+  const Box.list({
+    super.key,
+    // -= List =-
+    this.children, this.itemBuilder, this.itemCount, this.physics, this.direction,
+    // -= Padding and Margin =-
+    this.padding, this.margin,
+    // -= Background =-
+    this.backgroundColor, this.backgroundGradient, this.backgroundImage,
+    // -= Size =-
+    this.width, this.height,
+    // -= Border =-
+    this.border, this.borderRadius,
+    // -= Shape =-
+    this.shape,
+    // -= Transform =-
+    this.translate, this.scale, this.rotate, this.origin,
+    // -= Text Style =-
+    this.textStyle,
+    // -= Button =-
+    this.splashColor, this.highlightColor, this.hoverColor, this.buttonColor,
+    // -= Gesture Detector =-
+    this.onTap, this.onDoubleTap, this.onLongPress,
+  }) : 
+    child = null,
+    alignment = null,
+    spacing = null;
+
+  const Box.column({
+    super.key,
+    // -= List =-
+    this.children, this.itemBuilder, this.itemCount, this.physics,
+    // -= Padding and Margin =-
+    this.padding, this.margin,
+    // -= Background =-
+    this.backgroundColor, this.backgroundGradient, this.backgroundImage,
+    // -= Size =-
+    this.width, this.height,
+    // -= Border =-
+    this.border, this.borderRadius,
+    // -= Shape =-
+    this.shape,
+    // -= Alignment =-
+    this.alignment = Alignment.topLeft,
+    this.spacing,
+    // -= Transform =-
+    this.translate, this.scale, this.rotate, this.origin,
+    // -= Text Style =-
+    this.textStyle,
+    // -= Button =-
+    this.splashColor, this.highlightColor, this.hoverColor, this.buttonColor,
+    // -= Gesture Detector =-
+    this.onTap, this.onDoubleTap, this.onLongPress,
+  }) : 
+    child = null,
+    direction = Axis.vertical;
+
+  const Box.row({
+    super.key,
+    // -= List =-
+    this.children, this.itemBuilder, this.itemCount, this.physics,
+    // -= Padding and Margin =-
+    this.padding, this.margin,
+    // -= Background =-
+    this.backgroundColor, this.backgroundGradient, this.backgroundImage,
+    // -= Size =-
+    this.width, this.height,
+    // -= Border =-
+    this.border, this.borderRadius,
+    // -= Shape =-
+    this.shape,
+    // -= Alignment =-
+    this.alignment = Alignment.topLeft,
+    this.spacing,
+    // -= Transform =-
+    this.translate, this.scale, this.rotate, this.origin,
+    // -= Text Style =-
+    this.textStyle,
+    // -= Button =-
+    this.splashColor, this.highlightColor, this.hoverColor, this.buttonColor,
+    // -= Gesture Detector =-
+    this.onTap, this.onDoubleTap, this.onLongPress,
+  }) : 
+    child = null,
+    direction = Axis.horizontal;
 
   
 
@@ -170,13 +239,13 @@ class Box extends StatelessWidget {
 
   bool get hasList =>
     (itemBuilder != null || children != null) &&
-    alignment == null;
+    (alignment == null && spacing == null);
 
 
 
   bool get hasColumnRow => 
     (itemBuilder != null || children != null) &&
-    alignment != null;
+    !(alignment == null && spacing == null);
   
 
 
@@ -184,16 +253,13 @@ class Box extends StatelessWidget {
     // -= Padding and Margin =-
     (
       (padding != null || alignment != null) &&
-      !hasList && !hasColumnRow
+      !hasList && !hasColumnRow && !hasInkWell
     ) || 
     margin != null ||
 
     // -= Size =-
     width != null ||
     height != null ||
-
-    // -= Expanded =-
-    expanded != null ||
     
     hasDecoration;
 
@@ -218,6 +284,21 @@ class Box extends StatelessWidget {
     translate != null ||
     scale != null ||
     rotate != null;
+
+
+
+  bool get hasInkWell =>
+    splashColor != null || 
+    highlightColor != null ||
+    hoverColor != null ||
+    buttonColor != null;
+
+
+
+  bool get hasGestureDetector =>
+    onTap != null ||
+    onDoubleTap != null ||
+    onLongPress != null;
 
 
 
@@ -264,46 +345,139 @@ class Box extends StatelessWidget {
           itemList.add(itemBuilder!(context, i));
         }
       }
-      
-      composedWidget = Column(
-        children: itemList,
-        mainAxisAlignment: spacing?.alignment ?? alignment?.toMainAxisAlignment() ?? MainAxisAlignment.start,
-        crossAxisAlignment: alignment?.toCrossAxisAlignment() ?? CrossAxisAlignment.center,
-      );
-    }
-    
 
+      if (direction == Axis.vertical) {
+        composedWidget = Column(
+          children: itemList,
+          mainAxisAlignment: spacing?.alignment ?? alignment?.toMainAxisAlignment() ?? MainAxisAlignment.start,
+          crossAxisAlignment: alignment?.toCrossAxisAlignment() ?? CrossAxisAlignment.start,
+        );
+      } else {
+        composedWidget = Row(
+          children: itemList,
+          mainAxisAlignment: spacing?.alignment ?? alignment?.toMainAxisAlignment() ?? MainAxisAlignment.start,
+          crossAxisAlignment: alignment?.toCrossAxisAlignment() ?? CrossAxisAlignment.start,
+        );
+      }
+    }
+
+
+
+    // -= InkWell =-
+    if (hasInkWell) {
+      // -= Alignment =-
+      if (alignment != null && !hasColumnRow) {
+        composedWidget = Align(
+          alignment: alignment!,
+          child: composedWidget,
+        );  
+      }
+
+      // -= Padding =-
+      if (padding != null && !hasList) {
+        composedWidget = Padding(
+          padding: padding!,
+          child: composedWidget,
+        );
+      }
+      
+      // -= Gesture Detector =-
+      if (hasGestureDetector) {
+        composedWidget = GestureDetector(
+          child: composedWidget,
+          behavior: HitTestBehavior.deferToChild,
+          onTap: onTap,
+          onDoubleTap: onDoubleTap,
+          onLongPress: onLongPress,
+        );
+      }
+
+      composedWidget = Material(
+        // -= "Container" =-
+        child: Ink(
+          // -= Size =-
+          width: width,
+          height: height,
+
+          decoration:
+            hasDecoration ? BoxDecoration(
+              // -= Background =-
+              color: backgroundColor ?? Colors.transparent,
+              gradient: backgroundGradient,
+              image: backgroundImage,
+
+              // -= Border =-
+              border: border,
+              borderRadius: borderRadius,
+
+              // -= Shape =-
+              shape: shape ?? BoxShape.rectangle,
+            ) : null,
+          
+          // -= InkWell =-
+          child: InkWell(
+            splashColor: splashColor ?? buttonColor?.withOpacity(0.3),
+            highlightColor: highlightColor ?? buttonColor?.withOpacity(0.15),
+            hoverColor: hoverColor ?? buttonColor?.withOpacity(0.05),
+            onTap: () {},
+            child: composedWidget,
+          )
+        )
+      );
+
+      // -= Margin =-
+      if (margin != null) {
+        composedWidget = Padding(
+          padding: margin!,
+          child: composedWidget,
+        );
+      }
+    }
 
     // -= Container =-
-    if (hasContainer) {
-      composedWidget = Container(
-        // -= Padding and Margin =-
-        padding: padding,
-        margin: margin,
+    else if (hasContainer) {
+      composedWidget = SizedBox(
+        child: Container(
+          color: !hasDecoration ? Colors.transparent : null,
+          // -= Padding and Margin =-
+          padding: padding,
+          margin: margin,
 
-        // -= Size and Expanded =-
-        width: width ?? (expanded ?? false ? double.infinity : null),
-        height: height ?? (expanded ?? false ? double.infinity : null),
+          // -= Size =-
+          width: width,
+          height: height,
 
-        // -= Alignment =-
-        alignment: (!hasList && !hasColumnRow) ? alignment : null,
+          // -= Alignment =-
+          alignment: !hasColumnRow ? alignment : null,
+          
+          decoration:
+            hasDecoration ? BoxDecoration(
+              // -= Background =-
+              color: backgroundColor ?? Colors.transparent,
+              gradient: backgroundGradient,
+              image: backgroundImage,
 
-        decoration:
-          hasDecoration ? BoxDecoration(
-            // -= Background =-
-            color: backgroundColor,
-            gradient: backgroundGradient,
-            image: backgroundImage,
+              // -= Border =-
+              border: border,
+              borderRadius: borderRadius,
 
-            // -= Border =-
-            border: border,
-            borderRadius: borderRadius,
-
-            // -= Shape =-
-            shape: shape ?? BoxShape.rectangle,
-          ) : null,
-        child: composedWidget,
+              // -= Shape =-
+              shape: shape ?? BoxShape.rectangle,
+            ) : null,
+          child: composedWidget,
+        ),
       );
+
+      // -= Gesture Detector =-
+      if (hasGestureDetector) {
+        composedWidget = GestureDetector(
+          child: composedWidget,
+          behavior: HitTestBehavior.deferToChild,
+          onTap: onTap,
+          onDoubleTap: onDoubleTap,
+          onLongPress: onLongPress,
+        );
+      }
     }
 
 
@@ -364,13 +538,13 @@ enum Spacing {
 
 extension on Alignment {
   MainAxisAlignment toMainAxisAlignment() {
-    if (this == Alignment.bottomCenter || this == Alignment.bottomLeft || this == Alignment.bottomRight)
+    if (this == Alignment.topCenter || this == Alignment.topLeft || this == Alignment.topRight)
       return MainAxisAlignment.start;
 
     if (this == Alignment.center || this == Alignment.centerLeft ||this == Alignment.centerRight)
       return MainAxisAlignment.center;
 
-    if (this == Alignment.topCenter || this == Alignment.topLeft || this == Alignment.topRight)
+    if (this == Alignment.bottomCenter || this == Alignment.bottomLeft || this == Alignment.bottomRight)
       return MainAxisAlignment.end;
 
     return MainAxisAlignment.start;
@@ -386,6 +560,6 @@ extension on Alignment {
     if (this == Alignment.bottomRight || this == Alignment.centerRight || this == Alignment.topRight)
       return CrossAxisAlignment.end;
 
-    return CrossAxisAlignment.center;
+    return CrossAxisAlignment.start;
   }
 }
