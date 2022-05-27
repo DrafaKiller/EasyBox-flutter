@@ -105,6 +105,9 @@ Box(
   splashColor: ... ,
   highlightColor: ... ,
   hoverColor: ... ,
+  
+  // All the above at once
+  buttonColor: ... ,
 
   onTap: () => ... ,
   onLongPress: () => ... ,
