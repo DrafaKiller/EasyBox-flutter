@@ -98,8 +98,17 @@ class Box extends StatelessWidget {
 
 
   // -= Gesture Detector =-
+  /// Callback to when the Box is tapped.
+  /// 
+  /// This creates a GestureDetector widget.
   final Function()? onTap;
+  /// Callback to when the Box is double tapped.
+  /// 
+  /// This creates a GestureDetector widget.
   final Function()? onDoubleTap;
+  /// Callback to when the Box is pressed for a bit.
+  /// 
+  /// This creates a GestureDetector widget.
   final Function()? onLongPress;
 
 

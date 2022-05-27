@@ -1,3 +1,7 @@
+## 0.1.0+1
+
+* Added: More documentation
+
 ## 0.1.0
 
 * Added: `InkWell` functionalities *(button)*
